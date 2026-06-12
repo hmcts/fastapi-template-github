@@ -1,18 +1,10 @@
 import pytest
 from fastapi.testclient import TestClient
-from fastapi import FastAPI
-from app.routers.root import router
 
 
 @pytest.fixture
-def app():
-    _app = FastAPI()
-    _app.include_router(router)
-    return _app
-
-
-@pytest.fixture
-def client(app):
+def client():
+    from app.main import app
     return TestClient(app)
 
 
@@ -20,3 +12,15 @@ def test_root_returns_welcome_message(client):
     response = client.get("/")
     assert response.status_code == 200
     assert "mycomponent" in response.text
+
+
+def test_readiness_returns_up(client):
+    response = client.get("/health/readiness")
+    assert response.status_code == 200
+    assert response.json() == {"status": "UP"}
+
+
+def test_liveness_returns_up(client):
+    response = client.get("/health/liveness")
+    assert response.status_code == 200
+    assert response.json() == {"status": "UP"}
