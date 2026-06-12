@@ -23,6 +23,17 @@ uv run uvicorn app.main:app --reload
 
 The service will be available at `http://localhost:8000`.
 
+## Running locally via Docker
+
+> **Note:** The Dockerfile uses an HMCTS internal base image from `hmctsprod.azurecr.io`. You must be logged in to the registry (`az acr login --name hmctsprod`) before building.
+
+```bash
+docker build -t mycomponent .
+docker run -p 8000:8000 mycomponent
+```
+
+The service will be available at `http://localhost:8000`.
+
 ## Health endpoints
 
 Your service must expose:
