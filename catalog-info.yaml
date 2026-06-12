@@ -1,0 +1,19 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: "myproduct-mycomponent"
+  description: "mycomponent service"
+  annotations:
+    jenkins.io/job-full-name: cft:HMCTS_myproduct/fastapi-template-github
+    github.com/project-slug: 'hmcts/fastapi-template-github'
+  tags:
+    - python
+  links:
+    - url: https://hmcts-reform.slack.com/app_redirect?channel=your-slack-channel
+      title: your-slack-channel on Slack
+      icon: chat
+spec:
+  type: service
+  system: myproduct
+  lifecycle: experimental
+  owner: "team-name"
