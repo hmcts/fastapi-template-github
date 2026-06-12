@@ -74,6 +74,19 @@ if [[ -f "Jenkinsfile_template" ]]; then
   info "Renamed Jenkinsfile_template → Jenkinsfile_CNP"
 fi
 
+# ─── Remove "Using this template" section from README ────────────────────────
+if [[ -f "README.md" ]]; then
+  awk '/^## Using this template/{skip=1} skip && /^## / && !/^## Using this template/{skip=0} !skip' README.md > README.md.tmp
+  mv README.md.tmp README.md
+  # Update title and description
+  sed -i.bak \
+    -e "1s/.*/# ${PRODUCT}-${COMPONENT}/" \
+    -e "3s/.*/A Python FastAPI microservice./" \
+    README.md
+  rm -f README.md.bak
+  info "Updated README.md title and description"
+fi
+
 # ─── Done ────────────────────────────────────────────────────────────────────
 echo ""
 echo -e "  ${GREEN}Setup complete!${NC}"
