@@ -14,9 +14,11 @@ Click **"Use this template"** on GitHub, then find-and-replace the following pla
 
 ## Running locally
 
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/) then:
+
 ```bash
-pip install -e ".[dev]"
-uvicorn app.main:app --reload
+uv sync --extra dev
+uv run uvicorn app.main:app --reload
 ```
 
 The service will be available at `http://localhost:8000`.
@@ -31,7 +33,9 @@ Your service must expose:
 ## Running tests
 
 ```bash
-pytest tests/unit -v
+uv run pytest tests/unit -v          # unit tests
+uv run pytest tests/smoke -v         # smoke tests (requires TEST_URL env var)
+uv run pytest tests/functional -v    # functional tests (requires TEST_URL env var)
 ```
 
 ## Application Insights
