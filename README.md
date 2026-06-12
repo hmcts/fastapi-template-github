@@ -4,7 +4,13 @@ A GitHub template for HMCTS Python FastAPI microservices.
 
 ## Using this template
 
-Click **"Use this template"** on GitHub, then find-and-replace the following placeholders throughout the repo:
+Click **"Use this template"** on GitHub, clone your new repo, then run the setup script:
+
+```bash
+bash bin/setup.sh
+```
+
+This will prompt for your product and component names and replace all placeholders throughout the repo (files and directory names). There is also a base image placeholder in `Dockerfile` — replace it with the real HMCTS Python base image once available (check with the platform team).
 
 | Placeholder | Replace with | Example |
 |---|---|---|
