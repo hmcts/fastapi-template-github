@@ -1,0 +1,12 @@
+python:
+  applicationPort: 8000
+  image: 'hmctsprod.azurecr.io/myproduct/mycomponent:latest'
+  ingressHost: myproduct-mycomponent-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
+  environment:
+  # keyVaults:
+  #   myproduct:
+  #     secrets:
+  #       - name: AppInsightsConnectionString
+  #         alias: APPLICATIONINSIGHTS_CONNECTION_STRING
+  # postgresql:
+  #   enabled: true
