@@ -19,6 +19,7 @@ FROM hmctsprod.azurecr.io/base/python:3.13-distroless
 
 COPY --from=builder /opt/deps /opt/deps
 COPY app/ /opt/app/app/
+COPY pyproject.toml /opt/app/
 ENV PYTHONPATH=/opt/otel:/opt/deps
 
 CMD ["-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
