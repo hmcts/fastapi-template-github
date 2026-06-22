@@ -56,7 +56,23 @@ uv run pytest tests/functional -v    # functional tests (requires TEST_URL env v
 
 ## Application Insights
 
-To enable Azure Application Insights telemetry, uncomment the two lines in `app/main.py` and add `azure-monitor-opentelemetry` to `pyproject.toml`. Set the `APPLICATIONINSIGHTS_CONNECTION_STRING` environment variable at runtime.
+The service uses the [HMCTS Python base image](https://github.com/hmcts/cnp-python-base), which has Azure Application Insights pre-wired via OpenTelemetry — no application code changes are required.
+
+### Environment variables
+
+| Variable | Required | Description |
+|---|---|---|
+| `APPLICATIONINSIGHTS_CONNECTION_STRING` | One of these two | The App Insights connection string directly. |
+| `APPLICATIONINSIGHTS_CONNECTION_STRING_FILE` | One of these two | Path to a file containing the connection string (recommended for cluster deployments). |
+| `OTEL_SERVICE_NAME` | Optional | Labels telemetry with the service name. Defaults to `unknown_service`. |
+| `APPLICATIONINSIGHTS_LOGGER_NAMESPACE` | Optional | Logger namespace whose logs are forwarded to App Insights. Defaults to `uvicorn`. Set to `""` to capture all logs. |
+| `OTEL_PYTHON_EXCLUDED_URLS` | Optional | Comma-separated URL patterns to exclude from tracing. Defaults to `health,readiness,liveness`. |
+
+In HMCTS clusters, mount the connection string from Key Vault as a file and point `APPLICATIONINSIGHTS_CONNECTION_STRING_FILE` at it to keep the secret out of git.
+
+Leave both connection string variables unset and telemetry is disabled — local development is unaffected.
+
+For full details see the [cnp-python-base Application Insights documentation](https://github.com/hmcts/cnp-python-base#application-insights).
 
 ## Managing dependencies
 
