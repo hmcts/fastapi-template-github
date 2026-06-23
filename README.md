@@ -22,7 +22,7 @@ This will prompt for your product and component names and replace all placeholde
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/) then:
 
 ```bash
-uv sync --extra dev
+uv sync
 uv run uvicorn app.main:app --reload
 ```
 
@@ -41,18 +41,40 @@ The service will be available at `http://localhost:8000`.
 
 ## Health endpoints
 
-Your service must expose:
-
-- `GET /health/readiness` — return HTTP 200 when ready to receive traffic
-- `GET /health/liveness` — return HTTP 200 when the process is alive
+| Endpoint | Purpose |
+|---|---|
+| `GET /health` | Checked by the Jenkins pipeline after deploy to confirm the service is up |
+| `GET /health/readiness` | Return HTTP 200 when ready to receive traffic |
+| `GET /health/liveness` | Return HTTP 200 when the process is alive |
 
 ## Running tests
 
 ```bash
-uv run pytest tests/unit -v          # unit tests
-uv run pytest tests/smoke -v         # smoke tests (requires TEST_URL env var)
-uv run pytest tests/functional -v    # functional tests (requires TEST_URL env var)
+uv run pytest tests/unit -v                              # unit tests
+uv run pytest tests/unit -v --cov=app --cov-report=xml  # unit tests with coverage
+uv run pytest tests/smoke -v                             # smoke tests (requires TEST_URL env var)
+uv run pytest tests/functional -v                       # functional tests (requires TEST_URL env var)
 ```
+
+## Security scanning
+
+The Jenkins pipeline runs `uv audit` on every build to check for known vulnerabilities in dependencies. If vulnerabilities are found, the build fails and a `uv-audit-report.json` artifact is attached to the build with full details.
+
+To run the audit locally:
+
+```bash
+uv audit
+```
+
+Fix vulnerabilities by upgrading the affected package:
+
+```bash
+uv lock --upgrade-package <package>
+```
+
+## Code quality
+
+A `sonar-project.properties` file is included. SonarCloud analysis runs automatically in the Jenkins pipeline on every PR and merge to `master`. Coverage results from pytest are uploaded automatically — no manual configuration required.
 
 ## Application Insights
 
