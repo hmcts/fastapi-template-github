@@ -11,6 +11,11 @@ app = FastAPI(title="mycomponent")
 app.include_router(root.router)
 
 
+@app.get("/health")
+async def health() -> dict:
+    return {"status": "UP"}
+
+
 @app.get("/health/readiness")
 async def readiness() -> dict:
     return {"status": "UP"}
